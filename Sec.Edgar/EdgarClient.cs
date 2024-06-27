@@ -12,6 +12,7 @@ public class EdgarClient
     private readonly SubmissionProvider _submissionProvider;
     private readonly CompanyFactProvider _factProvider;
     private readonly CompanyConceptProvider _conceptProvider;
+    private readonly StreamProvider _streamProvider;
 
     public EdgarClient(ClientInfo clientInfo)
     {
@@ -33,6 +34,7 @@ public class EdgarClient
         _submissionProvider = new SubmissionProvider(cikProvider, clientInfo.GetLogger<SubmissionProvider>(), _cts.Token);
         _factProvider = new CompanyFactProvider(cikProvider, clientInfo.GetLogger<CompanyFactProvider>(), _cts.Token);
         _conceptProvider = new CompanyConceptProvider(cikProvider, clientInfo.GetLogger<CompanyConceptProvider>(), _cts.Token);
+        _streamProvider = new StreamProvider(cikProvider, clientInfo.GetLogger<StreamProvider>(), _cts.Token);
     }
 
     public async Task<Submission?> GetAllSubmissions(string identifier) => await _submissionProvider.GetAll(identifier);
@@ -48,4 +50,5 @@ public class EdgarClient
     
     public async Task<CompanyConcept?> GetCompanyConcept(int identifier, Taxonomy taxonomy, string xbrlTag) =>
         await _conceptProvider.Get(identifier, taxonomy, xbrlTag);
+    public async Task<Stream?> GetStream(Uri uri) => await _streamProvider.GetStream(uri);
 }
